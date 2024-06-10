@@ -1,0 +1,17 @@
+.home {
+    text-align: left;
+    margin-bottom: 5%;
+}
+
+.github-btn {
+    border: 2px solid var(--yellow);   
+    padding: 10px 20px;
+}
+
+  @media screen and (max-width: 800px) { 
+    .home {
+      text-align: center;  
+    }
+  }
+  
+ 

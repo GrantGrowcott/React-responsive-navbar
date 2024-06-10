@@ -1,24 +1,38 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation} from "react-router-dom";
 import "./NavBar.css";
-import { CodeIcon, HamburgetMenuClose, HamburgetMenuOpen } from "./Icons";
+import {  HamburgetMenuClose, HamburgetMenuOpen } from "./Icons";
+import logo from '../Icons/gg-logo.png';
 
 function NavBar() {
   const [click, setClick] = useState(false);
+  console.log(click);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const handleClick = () => setClick(!click);
+
+  const location = useLocation();
+
+  const handleClick = () => {
+    setIsTransitioning(true);
+    setClick(!click);
+  };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500); 
+
+    return () => clearTimeout(timeoutId);
+  }, [location.pathname]);
   return (
     <>
-      <nav className="navbar">
+      <nav className={`navbar ${isTransitioning ? "transitioning" : ""}`}>
         <div className="nav-container">
           <NavLink exact to="/" className="nav-logo">
-            <span>CodeBucks</span>
-            {/* <i className="fas fa-code"></i> */}
             <span className="icon">
-              <CodeIcon />
+              <img src = {logo} alt= "logo"/>
             </span>
           </NavLink>
-
           <ul className={click ? "nav-menu active" : "nav-menu"}>
             <li className="nav-item">
               <NavLink
@@ -45,12 +59,23 @@ function NavBar() {
             <li className="nav-item">
               <NavLink
                 exact
-                to="/blog"
+                to="/reads"
                 activeClassName="active"
                 className="nav-links"
                 onClick={handleClick}
               >
-                Blog
+                My Reads
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink
+                exact
+                to="/projects"
+                activeClassName="active"
+                className="nav-links"
+                onClick={handleClick}
+              >
+                Projects
               </NavLink>
             </li>
             <li className="nav-item">
@@ -61,20 +86,18 @@ function NavBar() {
                 className="nav-links"
                 onClick={handleClick}
               >
-                Contact Us
+                Contact
               </NavLink>
             </li>
           </ul>
           <div className="nav-icon" onClick={handleClick}>
-            {/* <i className={click ? "fas fa-times" : "fas fa-bars"}></i> */}
-
             {click ? (
               <span className="icon">
-                <HamburgetMenuOpen />{" "}
+                <HamburgetMenuClose />{" "}
               </span>
             ) : (
               <span className="icon">
-                <HamburgetMenuClose />
+                <HamburgetMenuOpen />
               </span>
             )}
           </div>
